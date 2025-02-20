@@ -3,15 +3,28 @@ import React, { useState, useEffect } from "react";
 import { Check, X } from "lucide-react";
 import { FaQuoteRight } from "react-icons/fa";
 
-const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+// One week in milliseconds
+// const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+const ONE_WEEK_MS = 1 * 60 * 1000;
+
+function formatTime(ms) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const seconds = totalSeconds % 60;
+  const totalMinutes = Math.floor(totalSeconds / 60);
+  const minutes = totalMinutes % 60;
+  const hours = Math.floor(totalMinutes / 60);
+  return `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+}
 
 const QuranTrackerMVP = () => {
   const weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
   const [dailyGoal, setDailyGoal] = useState(null);
   const [goalInput, setGoalInput] = useState("");
   const [isGoalLocked, setIsGoalLocked] = useState(false);
+  const [timeLeft, setTimeLeft] = useState("");
 
-  // Check if a goal has been set within the last week
   useEffect(() => {
     const storedTimestamp = localStorage.getItem("dailyGoalTimestamp");
     const storedGoal = localStorage.getItem("dailyGoal");
@@ -20,6 +33,27 @@ const QuranTrackerMVP = () => {
       if (diff < ONE_WEEK_MS) {
         setDailyGoal(parseInt(storedGoal, 10));
         setIsGoalLocked(true);
+        // Set the remaining time
+        setTimeLeft(formatTime(ONE_WEEK_MS - diff));
+
+        // Set up an interval to update the remaining time every second
+        const intervalId = setInterval(() => {
+          const newDiff = Date.now() - parseInt(storedTimestamp, 10);
+          if (newDiff < ONE_WEEK_MS) {
+            setTimeLeft(formatTime(ONE_WEEK_MS - newDiff));
+          } else {
+            // Unlock goal after one week
+            localStorage.removeItem("dailyGoalTimestamp");
+            localStorage.removeItem("dailyGoal");
+            setIsGoalLocked(false);
+            setDailyGoal(null);
+            setTimeLeft("");
+            clearInterval(intervalId);
+          }
+        }, 1000);
+
+        // Clean up the interval on unmount
+        return () => clearInterval(intervalId);
       } else {
         // Allow changes if one week has passed
         localStorage.removeItem("dailyGoalTimestamp");
@@ -27,16 +61,17 @@ const QuranTrackerMVP = () => {
         setIsGoalLocked(false);
       }
     }
-  }, []);
+  }, [timeLeft]);
 
   const handleSetGoal = () => {
-    const parsedValue = parseInt(goalInput, 10);
+    const parsedValue = parseInt(goalInput, 10); // Converts goalInput to a number (base 10)
     if (!isNaN(parsedValue) && parsedValue >= 1 && !isGoalLocked) {
       setDailyGoal(parsedValue);
-      // Save the goal and current timestamp to localStorage
+      // Save the goal and the current timestamp to localStorage
       localStorage.setItem("dailyGoal", parsedValue);
       localStorage.setItem("dailyGoalTimestamp", Date.now().toString());
       setIsGoalLocked(true);
+      setTimeLeft(formatTime(ONE_WEEK_MS));
     }
   };
 
@@ -45,7 +80,6 @@ const QuranTrackerMVP = () => {
       <TopBar />
 
       <main className="container mx-auto px-4 py-8">
-        {/* Motivation Section */}
         <section
           id="motivation"
           className="bg-emerald-50 rounded-lg p-6 mb-8 mt-16"
@@ -62,7 +96,6 @@ const QuranTrackerMVP = () => {
           </div>
         </section>
 
-        {/* Daily Goal Setup */}
         <section
           id="goal-setup"
           className="bg-white rounded-lg p-6 mb-8 shadow-sm"
@@ -86,7 +119,7 @@ const QuranTrackerMVP = () => {
                 max="604"
                 value={goalInput}
                 onChange={(e) => setGoalInput(e.target.value)}
-                // disabled={isGoalLocked}
+                disabled={isGoalLocked}
               />
             </div>
             <button
@@ -108,6 +141,11 @@ const QuranTrackerMVP = () => {
                 Once the number of pages is selected, it cannot be changed for
                 the next 1 week.
               </p>
+              {timeLeft && (
+                <p className="text-sm text-gray-500 mt-2">
+                  Time remaining: {timeLeft}
+                </p>
+              )}
             </>
           ) : (
             <h2 className="block text-gray-600 text-xl font-medium mt-4 mb-2 text-center">
@@ -117,14 +155,12 @@ const QuranTrackerMVP = () => {
           )}
         </section>
 
-        {/* Progress & Reminder Section */}
         <section id="progress" className="grid md:grid-cols-2 gap-8 mb-8">
-          {/* Today's Progress */}
           <div
             id="daily-progress"
             className="bg-white rounded-lg p-6 shadow-sm"
           >
-            <h2 className="text-xl text-gray-800 mb-4">Today's Progress</h2>
+            <h2 className="text-xl text-gray-800 mb-4">Weekly Progress</h2>
             <div className="flex items-center justify-center">
               <div className="relative w-48 h-48">
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -142,6 +178,7 @@ const QuranTrackerMVP = () => {
                     fill="none"
                     stroke="#059669"
                     strokeWidth="3"
+                    // strokeDasharray is the one showing the green progress
                     strokeDasharray="75, 100"
                   />
                 </svg>
@@ -149,12 +186,11 @@ const QuranTrackerMVP = () => {
             </div>
           </div>
 
-          {/* Reminder Settings */}
           <div id="reminder" className="bg-white rounded-lg p-6 shadow-sm">
             <h2 className="text-xl text-gray-800 mb-4">Reminder Settings</h2>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-gray-600">Iftar Reminder</span>
+                <span className="text-gray-600">Whatsapp Daily Reminder</span>
                 <label className="relative inline-flex items-center cursor-pointer">
                   <input
                     type="checkbox"
@@ -179,7 +215,6 @@ const QuranTrackerMVP = () => {
           </div>
         </section>
 
-        {/* Weekly Overview */}
         <section
           id="weekly-overview"
           className="bg-white rounded-lg p-6 shadow-sm mb-8"
