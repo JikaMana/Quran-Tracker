@@ -2,12 +2,171 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Noor | Daily Islamic Reminder</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <title>Document</title>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <div>
+      <div class="mx-4">
+        <div class="flex justify-center w-full">
+          <header
+            class="fixed flex justify-between bg-white p-4 items-center max-w-[1280px] w-full"
+          >
+            <h1 class="text-4xl text-green-800 font-bold">Noor</h1>
+            <nav class="hidden md:block">
+              <ul class="flex gap-x-8">
+                <a href="/tracker.html" class="text-xl hover:text-green-800"
+                  >Quran Tracker</a
+                >
+                <a href="/" class="text-xl hover:text-green-800">Adhkar</a>
+                <a href="/" class="text-xl hover:text-green-800">Tasbeeh</a>
+              </ul>
+            </nav>
+            <div class="flex gap-x-4 items-center">
+              <i data-lucide="moon" class="w-9 h-9"></i>
+              <button
+                class="text-lg bg-green-800 py-2 px-4 rounded-md text-white"
+              >
+                Sign In
+              </button>
+            </div>
+          </header>
+        </div>
+        <div
+          class="flex flex-col justify-between lg:h-screen lg:pb-8 xl:pb-0 w-full bg-gradient-to-b from-green-50 to-white"
+        >
+          <div class="flex flex-col justify-center items-center mt-28">
+            <div class="max-w-60 max-h-60 object-center overflow-hidden mb-8">
+              <img
+                src="/images/Quran.jpg"
+                alt="There was supposed to be an image here"
+              />
+            </div>
+            <h2
+              class="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-center"
+            >
+              Your Digital Companion for Progress Tracking
+            </h2>
+            <p class="text-xl my-8 max-w-[682px] text-center">
+              Discover the beauty of the Quran, Hadith, and Islamic practices
+              through our comprehensive digital platform
+            </p>
+            <div class="flex gap-4">
+              <a
+                href="/tracker.html"
+                class="text-lg bg-green-700 py-2 px-4 rounded-md text-white"
+                >Start Tracking progress</a
+              >
+              <a
+                href="{ROUTES.HOME}"
+                class="text-lg bg-transparent border-2 border-amber-300 py-2 px-4 rounded-md text-amber-300"
+                >Start Reading Adhkar</a
+              >
+            </div>
+          </div>
+          <div
+            class="max-w-[1280px] mx-auto my-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8"
+          >
+            <a href="/tracker.html" class="shadow-xl rounded-xl p-4">
+              <i data-lucide="book-open" class="w-8 h-8 text-green-800"></i>
+              <h3 class="text-3xl font-bold my-2">Quran Tracker</h3>
+              <p>
+                Track your daily Quran reading progress and maintain your streak
+              </p>
+            </a>
+            <a href="{ROUTES.HOME}" class="shadow-xl rounded-xl p-4">
+              <i data-lucide="scroll" class="w-8 h-8 text-amber-300"></i>
+              <h3 class="text-3xl font-bold my-2">Daily Adhkar</h3>
+              <p>Keep track of your daily morning and evening supplications</p>
+            </a>
+            <a href="{ROUTES.HOME}" class="shadow-xl rounded-xl p-4">
+              <i data-lucide="help-circle" class="w-8 h-8 text-green-800"></i>
+              <h3 class="text-3xl font-bold my-2">Hadith Collection</h3>
+              <p>Access authentic Hadith collections with translations</p>
+            </a>
+          </div>
+        </div>
+        <div
+          class="bg-green-100 h-80 flex flex-col justify-center items-center"
+        >
+          <h2 class="text-3xl xl:text-4xl font-bold">Stay Connected</h2>
+          <p class="text-xl myd-4 text-center">
+            Subscribe to our newsletter for daily verses, Hadith, and Islamic
+            reminders
+          </p>
+          <div>
+            <input
+              type="text"
+              placeholder="Enter your email"
+              class="bg-white px-4 py-3 rounded-lg w-max"
+            />
+            <button
+              class="ml-4 bg-green-800 h-full px-4 rounded-lg font-medium text-white"
+            >
+              Subscribe
+            </button>
+          </div>
+        </div>
+        <footer class="mt-20 xl:mx-20 mx-10">
+          <div class="flex flex-col md:flex-row gap-8 justify-between mb-10">
+            <div>
+              <a href="/" class="my-3">
+                <div class="main-logo flex items-center gap-x-1">
+                  <i data-lucide="book-open" class="w-6 h-6 text-green-800"></i>
+                  <h1 class="text-green-800 text-xl font-bold">About Us</h1>
+                </div>
+              </a>
+              <p class="text-green-800 text-md font-medium max-w-xs my-4">
+                Dedicated to providing authentic Islamic content and tools for
+                spiritual growth
+              </p>
+            </div>
+            <div
+              class="flex flex-col sm:flex-row gap-6 sm:justify-between flex-[0.8]"
+            >
+              <div class="flex flex-col gap-y-4">
+                <h3 class="font-semibold text-lg">Navigate</h3>
+                <div class="flex flex-col gap-y-4 font-medium text-sm">
+                  <a href="/">Home</a>
+                  <a href="/about">Quran</a>
+                  <a href="/reciters">Adhkar</a>
+                  <a href="/blog">Hadith</a>
+                </div>
+              </div>
+              <div class="flex flex-col gap-y-4">
+                <h3 class="font-semibold text-lg">Support</h3>
+                <div class="flex flex-col gap-y-4 font-medium text-sm">
+                  <a href="#">FAQ</a>
+                  <a href="#">Contact</a>
+                  <a href="#">Privacy Policy</a>
+                  <a href="#">Terms of Services</a>
+                </div>
+              </div>
+              <div class="flex flex-col gap-y-4">
+                <h2 class="text-green-800 text-xl font-bold">Connect</h2>
+                <div id="contactUs" class="flex gap-4">
+                  <i data-lucide="facebook" class="w-6 h-6"></i>
+                  <i data-lucide="twitter" class="w-6 h-6"></i>
+                  <i data-lucide="instagram" class="w-6 h-6"></i>
+                  <i data-lucide="youtube" class="w-6 h-6"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr class="border-[1px] border-lime-950 my-2" />
+          <div class="flex justify-center font-medium mb-2">
+            <p>
+              <a href="/" class="text-green-800 text-xl font-bold"> Noor </a>
+              &copy; 2025 <span></span>
+            </p>
+          </div>
+        </footer>
+      </div>
+    </div>
+    <script>
+      lucide.createIcons();
+    </script>
   </body>
 </html>
